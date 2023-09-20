@@ -109,7 +109,7 @@ def map_data():
 
 @app.route('/get_tendency_data')
 def tendency_data():
-    global history
+    history = pd.read_csv('Covid9_data/history.csv')
     history.ds = pd.to_datetime(history.ds)
     history.set_index('ds', inplace=True)
     data = history['2022-11-01':'2022-12-31']

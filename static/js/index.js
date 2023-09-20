@@ -883,106 +883,235 @@
 })();
 
 
-//趋势
+//两月变化趋势
 (function () {
     $.ajax({
         url: "/get_tendency_data",  // 向接口地址发出请求
         success: function (charts) {
-            // 实例化对象，注意 .bar1 .chart 意思是找到bar1类别下面的chart类别所代表的标签
+            // 实例化对象，注意 .bar1 .chart 意思是找到line2类别下面的chart类别所代表的标签
             var myChart = echarts.init(document.querySelector('.line2 .chart'))
             // 指定配置项和数据
             var option;
             
             console.log(charts,'23123');
-
+            let {data_confirm_add, data_importedCase_add, dateList} = charts
+            let newData_confirm_add = []
+            let newdata_importedCase_add = []
+            let newdateList = []
+            data_confirm_add = data_confirm_add.map((item,index)=>{
+                if(index % 3 === 0){
+                    newData_confirm_add.push(item)
+                }
+            })
+            data_importedCase_add = data_importedCase_add.map((item,index)=>{
+                if(index % 3 === 0){
+                    newdata_importedCase_add.push(item)
+                }
+            })
+            dateList = dateList.map((item,index)=>{
+                if(index % 3 === 0){
+                    newdateList.push(item)
+                }
+            })
+            console.log(newData_confirm_add,newdata_importedCase_add,newdateList);
             var data = [];
-            // var seriesOption = [{
-            //     name: '',
-            //     type: 'pie',
-            //     clockWise: false,
-            //     radius: ['70%', '73%'],
-            //     hoverAnimation: false,
-            //     itemStyle: {
-            //         normal: {
-            //             label: {
-            //                 show: true,
-            //                 position: 'outside',
-            //                 color: '#ddd',
-            //                 formatter: function(params) {
-            //                     var percent = 0;
-            //                     var total = 0;
-            //                     for (var i = 0; i < trafficWay.length; i++) {
-            //                         total += trafficWay[i].value;
-            //                     }
-            //                     percent = ((params.value / total) * 100).toFixed(0);
-            //                     if (params.name !== '') {
-            //                         return   params.name + '\n' + '\n' + '占百分比：' + percent + '%';
-            //                     } else {
-            //                         return '';
-            //                     }
-            //                 },
-            //             },
-            //             labelLine: {
-            //                 length: 30,
-            //                 length2: 100,
-            //                 show: true,
-            //                 color: '#00ffff'
-            //             }
-            //         }
-            //     },
-            //     data: data
-            // }];
-            // option = {
-            //     // backgroundColor: '#0A2E5D',
-            //     color: color,
-            //     title: {
-            //         text: '各省确诊数量分布',
-            //         top: '48%',
-            //         textAlign: "center",
-            //         left: "49%",
-            //         textStyle: {
-            //             color: '#fff',
-            //             fontSize: 14,
-            //             fontWeight: '400'
-            //         }
-            //     },
-            //     graphic: {
-            //         elements: [{
-            //             type: "image",
-            //             z: 3,
-            //             style: {
-            //                 image: img,
-            //                 width: 120,
-            //                 height: 120
-            //             },
-            //             left: 'center',
-            //             top: 'center',
-            //             position: [100, 100]
-            //         }]
-            //     },
-            //     tooltip: {
-            //         show: false
-            //     },
-            //     legend: {
-            //         icon: "circle",
-            //         orient: 'horizontal',
-            //         // x: 'left',
-            //         data: ['优秀学生', '获得荣誉', '论文著作'],
-            //         left: '5%',
-            //         bottom: '1%',
-            //         align: 'right',
-            //         textStyle: {
-            //             color: "#fff"
-            //         },
-            //         itemGap: 20
-            //     },
-            //     toolbox: {
-            //         show: false
-            //     },
-            //     series: seriesOption
-            // }
-
-
+            option = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        lineStyle: {
+                            color: {
+                                type: 'linear',
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1,
+                                colorStops: [{
+                                    offset: 0,
+                                    color: 'rgba(0, 255, 233,0)'
+                                }, {
+                                    offset: 0.5,
+                                    color: 'rgba(255, 255, 255,1)',
+                                }, {
+                                    offset: 1,
+                                    color: 'rgba(0, 255, 233,0)'
+                                }],
+                                global: false
+                            }
+                        },
+                    },
+                },
+                grid: {
+                    top: '15%',
+                    left: '5%',
+                    right: '5%',
+                    bottom: '15%',
+                    // containLabel: true
+                },
+                xAxis: [{
+                    type: 'category',
+                    axisLine: {
+                        show: true
+                    },
+                    splitArea: {
+                        // show: true,
+                        color: '#f00',
+                        lineStyle: {
+                            color: '#f00'
+                        },
+                    },
+                    axisLabel: {
+                        color: '#fff',
+                        rotate: 45
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    boundaryGap: false,
+                    data: newdateList,
+                }],
+    
+                yAxis: [{
+                    type: 'value',
+                    min: 0,
+                    // max: 140,
+                    splitNumber: 4,
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            color: 'rgba(255,255,255,0.1)'
+                        }
+                    },
+                    axisLine: {
+                        show: false,
+                    },
+                    axisLabel: {
+                        show: false,
+                        margin: 20,
+                        textStyle: {
+                            color: '#d1e6eb',
+    
+                        },
+                    },
+                    axisTick: {
+                        show: false,
+                    },
+                }],
+                legend: {
+                    data: ['本土新增', '境外新增', ],
+                    textStyle: {   
+                        color: "#fff" // 这里是图例文字的颜色设置  
+                    }, 
+                },
+                series: [{
+                        name: '本土新增',
+                        type: 'line',
+                        // smooth: true, //是否平滑
+                        showAllSymbol: true,
+                        // symbol: 'image://./static/images/guang-circle.png',
+                        symbol: 'circle',
+                        symbolSize: 5,
+                        lineStyle: {
+                            normal: {
+                                color: "#6c50f3",
+                                shadowColor: 'rgba(0, 0, 0, .3)',
+                                shadowBlur: 0,
+                                shadowOffsetY: 5,
+                                shadowOffsetX: 5,
+                            },
+                        },
+                        label: {
+                            show: true,
+                            position: 'top',
+                            textStyle: {
+                                color: '#6c50f3',
+                            }
+                        },
+                        itemStyle: {
+                            color: "#6c50f3",
+                            borderColor: "#fff",
+                            borderWidth: 3,
+                            shadowColor: 'rgba(0, 0, 0, .3)',
+                            shadowBlur: 0,
+                            shadowOffsetY: 2,
+                            shadowOffsetX: 2,
+                        },
+                        tooltip: {
+                            show: false
+                        },
+                        areaStyle: {
+                            normal: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                        offset: 0,
+                                        color: 'rgba(108,80,243,0.3)'
+                                    },
+                                    {
+                                        offset: 1,
+                                        color: 'rgba(108,80,243,0)'
+                                    }
+                                ], false),
+                                shadowColor: 'rgba(108,80,243, 0.9)',
+                                shadowBlur: 20
+                            }
+                        },
+                        data: newData_confirm_add,
+                    },
+                    {
+                        name: '境外新增',
+                        type: 'line',
+                        // smooth: true, //是否平滑
+                        showAllSymbol: true,
+                        // symbol: 'image://./static/images/guang-circle.png',
+                        symbol: 'circle',
+                        symbolSize: 5,
+                        lineStyle: {
+                            normal: {
+                                color: "#00ca95",
+                                shadowColor: 'rgba(0, 0, 0, .3)',
+                                shadowBlur: 0,
+                                shadowOffsetY: 5,
+                                shadowOffsetX: 5,
+                            },
+                        },
+                        label: {
+                            show: true,
+                            position: 'top',
+                            textStyle: {
+                                color: '#00ca95',
+                            }
+                        },
+    
+                        itemStyle: {
+                            color: "#00ca95",
+                            borderColor: "#fff",
+                            borderWidth: 3,
+                            shadowColor: 'rgba(0, 0, 0, .3)',
+                            shadowBlur: 0,
+                            shadowOffsetY: 2,
+                            shadowOffsetX: 2,
+                        },
+                        tooltip: {
+                            show: false
+                        },
+                        areaStyle: {
+                            normal: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                        offset: 0,
+                                        color: 'rgba(0,202,149,0.3)'
+                                    },
+                                    {
+                                        offset: 1,
+                                        color: 'rgba(0,202,149,0)'
+                                    }
+                                ], false),
+                                shadowColor: 'rgba(0,202,149, 0.9)',
+                                shadowBlur: 10
+                            }
+                        },
+                        data: newdata_importedCase_add,
+                    },
+                ]
+            };
             // 加载配置项
             myChart.setOption(option);
             // 让图表跟随屏幕自动地去适应

@@ -104,7 +104,16 @@ def province_data():
 
 @app.route('/get_map_data')
 def map_data():
-    return jsonify()
+    details['year_month'] = details.update_time.dt.to_period('M')
+    g_ym = details.groupby('year_month')
+    year_month = g_ym.groups.keys()
+    year_month = list(map(str, year_month))
+    province = details.province.tolist()
+    return jsonify({
+        'year_month': year_month,
+        'province': province,
+        'confirm_add': ''
+    })
 
 @app.route('/get_dead_ratio')
 def get_dead_ratio():

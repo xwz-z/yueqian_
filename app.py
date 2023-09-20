@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 from flask import Flask, render_template, jsonify
 
@@ -128,18 +127,38 @@ def map_data():
 
 @app.route('/get_dead_ratio')
 def get_dead_ratio():
-    history.ds = pd.to_datetime(history.ds)
-    max_date = history.ds.max()
-    mask = history.ds == max_date
-    cols = ['confirm', 'dead']
-    data = history.loc[mask, cols]
-    confirm = data['confirm'].values
-    dead = data['dead'].values
-    ratio = dead / confirm
+    # global details
+    # details = details.sort_values('update_time')
+    # details_province = details.groupby('province')
+
+    details.update_time = pd.to_datetime(details.update_time)
+    max_date = details.update_time.max()
+    mask = details.update_time == max_date
+    data = details.loc[mask, ['province', 'confirm', 'dead']]
+
+    # 按照'province'列分类，求和'confirm'和'dead'列的数据
+    result = data.groupby('province').sum().reset_index()
+
+    # 计算'ratio'列
+    result['ratio'] = result['dead'] / result['confirm']
+
+    # 计算'ratio'列的总和
+    ratio_sum = result['ratio'].sum()
+
+    # 计算'ratio_ratio'列
+    result['ratio_ratio'] = result['ratio'] / ratio_sum
+
+    # 将结果转换为字典形式
+    result_dict = result.to_dict('list')
+
+    # 输出结果
+    print(result_dict)
     return jsonify({
-        'dead': float(dead),
-        'confirm': float(confirm),
-        'ratio': float(ratio)
+        'province': result_dict['province'],
+        'dead': result_dict['dead'],
+        'confirm': result_dict['confirm'],
+        'ratio': result_dict['ratio'],
+        'ratio_ratio': result_dict['ratio_ratio']
     })
 
 @app.route('/get_tendency_data')

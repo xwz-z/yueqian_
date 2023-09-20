@@ -106,6 +106,21 @@ def province_data():
 def map_data():
     return jsonify()
 
+@app.route('/get_dead_ratio')
+def get_dead_ratio():
+    history.ds = pd.to_datetime(history.ds)
+    max_date = history.ds.max()
+    mask = history.ds == max_date
+    cols = ['confirm', 'dead']
+    data = history.loc[mask, cols]
+    confirm = data['confirm'].values
+    dead = data['dead'].values
+    ratio = dead / confirm
+    return jsonify({
+        'dead': dead,
+        'confirm': confirm,
+        'ratio': ratio
+    })
 
 if __name__ == '__main__':
     app.run()

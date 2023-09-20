@@ -86,17 +86,28 @@ def heal_dead():
         }
     })
 
-
 @app.route('/get_province_data')
 def province_data():
     global details
     details = details.sort_values('update_time')
     details_province = details.groupby('province')
     data = details_province.apply(lambda x: x.tail(1))['confirm']
-    data_confirm = []
-    for item, confirm in zip(data.index, data.values):
-        if item[0] != '台湾':
-            data_confirm.append(dict(name=item[0], value=np.int(confirm)))
+    data_confirm = [
+        {'name': '0 - 100', 'value': 0},
+        {'name': '100 - 1000', 'value': 0},
+        {'name': '1000 - 10000', 'value': 0},
+        {'name': '10000+', 'value': 0}
+    ]
+    for confirm in data.values:
+        if confirm < 100:
+            data_confirm[0]['value'] += 1
+        elif confirm < 1000:
+            data_confirm[1]['value'] += 1
+        elif confirm < 10000:
+            data_confirm[2]['value'] += 1
+        else:
+            data_confirm[3]['value'] += 1
+    print(data_confirm)
     return jsonify({
         'data_confirm': data_confirm
     })

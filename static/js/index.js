@@ -1117,3 +1117,22 @@
         }
     })
 })();
+
+//死亡率
+(function () {
+    $.ajax({
+        url: "/get_dead_ratio",  // 向接口地址发出请求
+        success: function (data) {
+            // 实例化对象，注意 .bar1 .chart 意思是找到bar1类别下面的chart类别所代表的标签
+            var myChart = echarts.init(document.querySelector('.pie1 .chart'))
+            // 指定配置项和数据
+            var option;
+            // 加载配置项
+            myChart.setOption(option);
+            // 让图表跟随屏幕自动地去适应
+            window.addEventListener("resize", function() {
+            myChart.resize();
+            });
+        }
+    })
+})();

@@ -881,3 +881,114 @@
         }
     })
 })();
+
+
+//趋势
+(function () {
+    $.ajax({
+        url: "/get_tendency_data",  // 向接口地址发出请求
+        success: function (charts) {
+            // 实例化对象，注意 .bar1 .chart 意思是找到bar1类别下面的chart类别所代表的标签
+            var myChart = echarts.init(document.querySelector('.line2 .chart'))
+            // 指定配置项和数据
+            var option;
+            
+            console.log(charts,'23123');
+
+            var data = [];
+            // var seriesOption = [{
+            //     name: '',
+            //     type: 'pie',
+            //     clockWise: false,
+            //     radius: ['70%', '73%'],
+            //     hoverAnimation: false,
+            //     itemStyle: {
+            //         normal: {
+            //             label: {
+            //                 show: true,
+            //                 position: 'outside',
+            //                 color: '#ddd',
+            //                 formatter: function(params) {
+            //                     var percent = 0;
+            //                     var total = 0;
+            //                     for (var i = 0; i < trafficWay.length; i++) {
+            //                         total += trafficWay[i].value;
+            //                     }
+            //                     percent = ((params.value / total) * 100).toFixed(0);
+            //                     if (params.name !== '') {
+            //                         return   params.name + '\n' + '\n' + '占百分比：' + percent + '%';
+            //                     } else {
+            //                         return '';
+            //                     }
+            //                 },
+            //             },
+            //             labelLine: {
+            //                 length: 30,
+            //                 length2: 100,
+            //                 show: true,
+            //                 color: '#00ffff'
+            //             }
+            //         }
+            //     },
+            //     data: data
+            // }];
+            // option = {
+            //     // backgroundColor: '#0A2E5D',
+            //     color: color,
+            //     title: {
+            //         text: '各省确诊数量分布',
+            //         top: '48%',
+            //         textAlign: "center",
+            //         left: "49%",
+            //         textStyle: {
+            //             color: '#fff',
+            //             fontSize: 14,
+            //             fontWeight: '400'
+            //         }
+            //     },
+            //     graphic: {
+            //         elements: [{
+            //             type: "image",
+            //             z: 3,
+            //             style: {
+            //                 image: img,
+            //                 width: 120,
+            //                 height: 120
+            //             },
+            //             left: 'center',
+            //             top: 'center',
+            //             position: [100, 100]
+            //         }]
+            //     },
+            //     tooltip: {
+            //         show: false
+            //     },
+            //     legend: {
+            //         icon: "circle",
+            //         orient: 'horizontal',
+            //         // x: 'left',
+            //         data: ['优秀学生', '获得荣誉', '论文著作'],
+            //         left: '5%',
+            //         bottom: '1%',
+            //         align: 'right',
+            //         textStyle: {
+            //             color: "#fff"
+            //         },
+            //         itemGap: 20
+            //     },
+            //     toolbox: {
+            //         show: false
+            //     },
+            //     series: seriesOption
+            // }
+
+
+            // 加载配置项
+            myChart.setOption(option);
+            // 让图表跟随屏幕自动地去适应
+            window.addEventListener("resize", function() {
+            myChart.resize();
+            });
+        }
+    })
+})();

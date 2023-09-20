@@ -110,8 +110,8 @@ def map_data():
     year_month = list(map(str, year_month))
     province = details.province.tolist()
     return jsonify({
-        'year_month': year_month,
-        'province': province,
+        'year_month': 'year_month',
+        'province': 'province',
         'confirm_add': ''
     })
 
@@ -126,9 +126,9 @@ def get_dead_ratio():
     dead = data['dead'].values
     ratio = dead / confirm
     return jsonify({
-        'dead': dead,
-        'confirm': confirm,
-        'ratio': ratio
+        'dead': float(dead),
+        'confirm': float(confirm),
+        'ratio': float(ratio)
     })
 
 @app.route('/get_tendency_data')

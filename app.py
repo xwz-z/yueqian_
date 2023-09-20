@@ -107,5 +107,26 @@ def map_data():
     return jsonify()
 
 
+@app.route('/get_tendency_data')
+def tendency_data():
+    history.ds = pd.to_datetime(history.ds)
+    history.set_index('ds', inplace=True)
+    data = history['2022-11-01':'2022-12-31']
+    dateList = data.index.values
+    data_confirm_add = data.confirm_add.values
+    data_importCase_add = data.importCase_add.values
+    return jsonify({
+        'dateList': dateList,
+        'data_confirm_add': data_confirm_add,
+        'data_importCase_add': data_importCase_add
+    })
+
+
+@app.route('/get_heal_data')
+def dead_data():
+
+    return jsonify()
+
+
 if __name__ == '__main__':
     app.run()

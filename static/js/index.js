@@ -892,8 +892,6 @@
             var myChart = echarts.init(document.querySelector('.line2 .chart'))
             // 指定配置项和数据
             var option;
-            
-            console.log(charts,'23123');
             let {data_confirm_add, data_importedCase_add, dateList} = charts
             let newData_confirm_add = []
             let newdata_importedCase_add = []
@@ -913,8 +911,6 @@
                     newdateList.push(item)
                 }
             })
-            console.log(newData_confirm_add,newdata_importedCase_add,newdateList);
-            var data = [];
             option = {
                 tooltip: {
                     trigger: 'axis',

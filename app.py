@@ -119,8 +119,37 @@ def map_data():
     global details
     pivot_table = pd.pivot_table(details, values='Value', index='Category', aggfunc='sum')
     pivot_table.to_csv('pivot_table.csv')
+
+    details['year_month'] = details.update_time.dt.to_period('M')
+    g_ym = details.groupby('year_month')
+    year_month = g_ym.groups.keys()
+    year_month = list(map(str, year_month))
+    province = details.province.tolist()
+    return jsonify({
+        'year_month': 'year_month',
+        'province': 'province',
+        'confirm_add': ''
+    })
+    global details
+    pivot_table = pd.pivot_table(details, values='Value', index='Category', aggfunc='sum')
+    pivot_table.to_csv('pivot_table.csv')
     return jsonify()
 
+@app.route('/get_dead_ratio')
+def get_dead_ratio():
+    history.ds = pd.to_datetime(history.ds)
+    max_date = history.ds.max()
+    mask = history.ds == max_date
+    cols = ['confirm', 'dead']
+    data = history.loc[mask, cols]
+    confirm = data['confirm'].values
+    dead = data['dead'].values
+    ratio = dead / confirm
+    return jsonify({
+        'dead': float(dead),
+        'confirm': float(confirm),
+        'ratio': float(ratio)
+    })
 
 @app.route('/get_tendency_data')
 def tendency_data():
@@ -135,12 +164,6 @@ def tendency_data():
         'data_confirm_add': data_confirm_add,
         'data_importCase_add': data_importCase_add
     })
-
-
-@app.route('/get_heal_data')
-def dead_data():
-
-    return jsonify()
 
 
 if __name__ == '__main__':

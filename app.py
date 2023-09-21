@@ -114,6 +114,22 @@ def province_data():
     })
 
 
+# @app.route('/get_map_data')
+# def map_data():
+#     # details.update_time = pd.to_datetime(details.update_time)
+#     details['year_month'] = details.update_time.dt.to_period('M')
+#     data = details.groupby(['year_month', 'province']).apply(lambda x: x.confirm_add.sum())
+#     year_month = np.unique(details.year_month)
+#     province = np.unique(details.province)
+#     confirm_add = []
+#     for item in year_month:
+#         confirm_add.append(data.loc[item].values.tolist())
+#     return jsonify({
+#         'year_month': year_month.tolist(),
+#         'province': province.tolist(),
+#         'confirm_add': confirm_add
+#     })
+
 @app.route('/get_map_data')
 def map_data():
     # details.update_time = pd.to_datetime(details.update_time)
@@ -124,6 +140,7 @@ def map_data():
     confirm_add = []
     for item in year_month:
         confirm_add.append(data.loc[item].values.tolist())
+    year_month = np.vectorize(lambda x: x.strftime('%Y-%m'))(year_month)
     return jsonify({
         'year_month': year_month.tolist(),
         'province': province.tolist(),
@@ -156,9 +173,6 @@ def get_dead_ratio():
 
     # 将结果转换为字典形式
     result_dict = result.to_dict('list')
-
-    # 输出结果
-    print(result_dict)
     return jsonify({
         'province': result_dict['province'],
         'dead': result_dict['dead'],

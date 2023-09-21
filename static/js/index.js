@@ -1106,7 +1106,7 @@
             data.province.forEach((item,index)=>{
                 dataList.push({
                     name:item,
-                    value:data.ratio_ratio[index].toFixed(4)
+                    value:data.ratio[index].toFixed(4)
                 })
             })
             let option = {

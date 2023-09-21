@@ -173,12 +173,25 @@ def get_dead_ratio():
 
     # 将结果转换为字典形式
     result_dict = result.to_dict('list')
+
+
+    max_date = history.ds.max()
+    mask = history.ds == max_date
+    history_data = history.loc[mask, ['dead','confirm']]
+    history_data['ratio'] = history_data['dead'] / history_data['confirm']
+    print(history_data['ratio'])
+    history_data_dict = history_data.to_dict('list')
+
+
     return jsonify({
         'province': result_dict['province'],
         'dead': result_dict['dead'],
         'confirm': result_dict['confirm'],
         'ratio': result_dict['ratio'],
-        'ratio_ratio': result_dict['ratio_ratio']
+        'ratio_ratio': result_dict['ratio_ratio'],
+        'history_dead': history_data_dict['dead'],
+        'history_confirm': history_data_dict['confirm'],
+        'history_ratio': history_data_dict['ratio']
     })
 
 

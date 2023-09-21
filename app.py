@@ -1,16 +1,18 @@
+import numpy as np
 import pandas as pd
 from flask import Flask, render_template, jsonify
 
 app = Flask(__name__)
 
 history = pd.read_csv('Covid9_data/history.csv')
+history.ds = pd.to_datetime(history.ds)
 risk_info = pd.read_csv('Covid9_data/risk_area.csv')
 details = pd.read_csv('Covid9_data/details.csv')
 
 
 @app.route('/')
 def index():  # put application's code here
-    history.ds = pd.to_datetime(history.ds)
+    print(history)
     max_date = history.ds.max()
     mask = history.ds == max_date
     cols = ['confirm_add', 'heal_add', 'confirm_now', 'confirm']
@@ -62,8 +64,8 @@ def top5():
 def heal_dead():
     global history  # 在函数内部对全局变量进行重新赋值
     history['year_month'] = history.ds.dt.to_period('M')
-    history = history.sort_values('ds')
-    g_ym = history.groupby('year_month')
+    g_ym = history.sort_values('ds')
+    g_ym = g_ym.groupby('year_month')
     dateList = g_ym.groups.keys()
     dateList = list(map(str, dateList))
     # 新增趋势：每个月份的所有新增数据总和
@@ -84,6 +86,7 @@ def heal_dead():
             'heal': heal
         }
     })
+
 
 @app.route('/get_province_data')
 def province_data():
@@ -114,24 +117,20 @@ def province_data():
 
 @app.route('/get_map_data')
 def map_data():
-    global details
-    pivot_table = pd.pivot_table(details, values='Value', index='Category', aggfunc='sum')
-    pivot_table.to_csv('pivot_table.csv')
-
+    # details.update_time = pd.to_datetime(details.update_time)
     details['year_month'] = details.update_time.dt.to_period('M')
-    g_ym = details.groupby('year_month')
-    year_month = g_ym.groups.keys()
-    year_month = list(map(str, year_month))
-    province = details.province.tolist()
+    data = details.groupby(['year_month', 'province']).apply(lambda x: x.confirm_add.sum())
+    year_month = np.unique(details.year_month)
+    province = np.unique(details.province)
+    confirm_add = []
+    for item in year_month:
+        confirm_add.append(data.loc[item].values.tolist())
     return jsonify({
-        'year_month': 'year_month',
-        'province': 'province',
-        'confirm_add': ''
+        'year_month': year_month.tolist(),
+        'province': province.tolist(),
+        'confirm_add': confirm_add
     })
-    global details
-    pivot_table = pd.pivot_table(details, values='Value', index='Category', aggfunc='sum')
-    pivot_table.to_csv('pivot_table.csv')
-    return jsonify()
+
 
 @app.route('/get_dead_ratio')
 def get_dead_ratio():
@@ -169,12 +168,12 @@ def get_dead_ratio():
         'ratio_ratio': result_dict['ratio_ratio']
     })
 
+
 @app.route('/get_tendency_data')
 def tendency_data():
-    history = pd.read_csv('Covid9_data/history.csv')
-    history.ds = pd.to_datetime(history.ds)
-    history.set_index('ds', inplace=True)
-    data = history['2022-11-01':'2022-12-31']
+    data = history.copy()
+    data.set_index('ds', inplace=True)
+    data = data['2022-11-01':'2022-12-31']
     dateList = data.index.strftime("%Y-%m-%d").values
     data_confirm_add = data.confirm_add.values
     data_importedCase_add = data.importedCase_add.values

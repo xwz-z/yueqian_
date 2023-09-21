@@ -12,7 +12,6 @@ details = pd.read_csv('Covid9_data/details.csv')
 
 @app.route('/')
 def index():  # put application's code here
-    print(history)
     max_date = history.ds.max()
     mask = history.ds == max_date
     cols = ['confirm_add', 'heal_add', 'confirm_now', 'confirm']

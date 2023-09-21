@@ -1115,7 +1115,7 @@
                   top: "40%",
                   left: "38%",
                   textStyle: {
-                    fontSize: 13,
+                    fontSize: 12,
                     color: "#ffffff",
                   },
                 },
@@ -1123,7 +1123,6 @@
                   show: true,
                   confine: true,
                   trigger: "item",
-                  formatter: "{b} : {c}",
                 },
                 series: [
                   {
@@ -1147,13 +1146,12 @@
                             fontSize: 14,
                           },
                           d: {
-                            fontSize: 10,
-                            padding: [5, 0, 0, 0],
+                            fontSize: 15,
                             color: "#fff",
                           },
                           b: {
-                            fontSize: 10,
-                            padding: [0, 0, 5, 0],
+                            fontSize: 15,
+                            padding: [0, 0, 0, 0],
                             color: "#fff",
                           },
                         },

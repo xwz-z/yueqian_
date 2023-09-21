@@ -1111,9 +1111,9 @@
             })
             let option = {
                 title: {
-                  text: '各省死亡率占比',
+                  text: `全国死亡率\n\t\t\t\t${data.history_ratio[0].toFixed(4) * 100}%`,
                   top: "40%",
-                  left: "38%",
+                  left: "41%",
                   textStyle: {
                     fontSize: 12,
                     color: "#ffffff",
@@ -1140,7 +1140,7 @@
                     label: {
                       normal: {
                         //   formatter: '{b}\n{d}%\t{c}',
-                        formatter: "{b|{b}}{d|{d}%}",
+                        formatter: "{b|{b}}",
                         rich: {
                           icon: {
                             fontSize: 14,

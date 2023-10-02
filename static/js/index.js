@@ -870,16 +870,8 @@
             data_confirm_add = data_confirm_add.map((item,index)=>{
                 if(index % 3 === 0){
                     newData_confirm_add.push(item)
-                }
-            })
-            data_importedCase_add = data_importedCase_add.map((item,index)=>{
-                if(index % 3 === 0){
-                    newdata_importedCase_add.push(item)
-                }
-            })
-            dateList = dateList.map((item,index)=>{
-                if(index % 3 === 0){
-                    newdateList.push(item)
+                    newdata_importedCase_add.push(data_importedCase_add[index])
+                    newdateList.push(dateList[index])
                 }
             })
             option = {
